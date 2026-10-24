@@ -119,7 +119,7 @@
       <h2 class="text-2xl font-bold text-slate-900 mb-2">¡Favor registrado con éxito!</h2>
       <p class="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
         Tarifa aplicada por Keny: <span class="font-bold text-slate-800">0,00 €</span>.<br>
-        El favor queda saldado. Recuerda que la paciencia de Keny no es infinita, pero siempre acepta una cerveza.
+        El favor queda saldado. Recuerda que la paciencia de Keny es infinita y siempre acepta una cerveza.
       </p>
       <button 
         id="btn-restart" 
@@ -225,7 +225,7 @@
       }
 
       btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '<span>Procesando reclamación...</span>';
+      btnSubmit.innerHTML = '<span>Procesando valoración...</span>';
 
       try {
         await fetch(GOOGLE_SHEET_URL, {
@@ -242,7 +242,7 @@
         cardForm.classList.add('hidden');
         cardSuccess.classList.remove('hidden');
       } catch (err) {
-        alert('Error al enviar. Parece que el sistema se niega a registrar tu queja.');
+        alert('Error al enviar. Parece que el sistema se niega a registrar tu valoración.');
       } finally {
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<span>Enviar valoración</span><i class="fa-solid fa-stamp text-xs"></i>';
