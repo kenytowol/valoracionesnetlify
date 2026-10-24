@@ -20,7 +20,7 @@
     .face-btn.active {
       opacity: 1;
       filter: grayscale(0%);
-      transform: scale(1.22);
+      transform: scale(1.2);
     }
   </style>
 </head>
@@ -40,29 +40,29 @@
 
       <form id="rating-form" class="space-y-4">
         <!-- Selector de Caritas -->
-        <div class="text-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+        <div class="text-center bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-100">
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
             ¿Cómo de agradecido/a estás?
           </label>
-          <div id="faces-container" class="flex justify-center items-center gap-2.5 sm:gap-4 py-2">
+          <div id="faces-container" class="flex justify-center items-center gap-3 sm:gap-5 py-3">
             <!-- 1: Muy enfadado (Rojo) -->
-            <button type="button" class="face-btn text-rose-500 text-3xl sm:text-4xl focus:outline-none" data-val="1" aria-label="Muy insatisfecho">
+            <button type="button" class="face-btn text-rose-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="1" aria-label="Muy insatisfecho">
               <i class="fa-solid fa-face-angry"></i>
             </button>
             <!-- 2: Triste (Naranja) -->
-            <button type="button" class="face-btn text-orange-500 text-3xl sm:text-4xl focus:outline-none" data-val="2" aria-label="Insatisfecho">
+            <button type="button" class="face-btn text-orange-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="2" aria-label="Insatisfecho">
               <i class="fa-solid fa-face-frown"></i>
             </button>
             <!-- 3: Neutro (Amarillo) -->
-            <button type="button" class="face-btn text-amber-500 text-3xl sm:text-4xl focus:outline-none" data-val="3" aria-label="Neutro">
+            <button type="button" class="face-btn text-amber-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="3" aria-label="Neutro">
               <i class="fa-solid fa-face-meh"></i>
             </button>
             <!-- 4: Sonriente (Lima) -->
-            <button type="button" class="face-btn text-lime-500 text-3xl sm:text-4xl focus:outline-none" data-val="4" aria-label="Satisfecho">
+            <button type="button" class="face-btn text-lime-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="4" aria-label="Satisfecho">
               <i class="fa-solid fa-face-smile"></i>
             </button>
             <!-- 5: Radiante (Verde) -->
-            <button type="button" class="face-btn text-emerald-500 text-3xl sm:text-4xl focus:outline-none" data-val="5" aria-label="Muy satisfecho">
+            <button type="button" class="face-btn text-emerald-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="5" aria-label="Muy satisfecho">
               <i class="fa-solid fa-face-laugh-beam"></i>
             </button>
           </div>
@@ -180,7 +180,6 @@
     }
 
     function updateLabel(val) {
-      // Limpiar clases de color
       Object.values(labelColors).forEach(c => faceDesc.classList.remove(c));
 
       if (val > 0) {
@@ -235,7 +234,7 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
             nombre: nameInput.value.trim(),
-            estrellas: selectedRating, // Sigue enviando el número (1 a 5) al Sheets y Telegram
+            estrellas: selectedRating,
             comentario: commentInput.value.trim()
           })
         });
