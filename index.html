@@ -7,8 +7,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .star-btn { transition: transform 0.15s ease, color 0.15s ease; }
-    .star-btn:hover { transform: scale(1.18); }
+    .face-btn {
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0.45;
+      filter: grayscale(80%);
+    }
+    .face-btn:hover {
+      opacity: 0.85;
+      filter: grayscale(0%);
+      transform: scale(1.12);
+    }
+    .face-btn.active {
+      opacity: 1;
+      filter: grayscale(0%);
+      transform: scale(1.22);
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between p-4 sm:p-6 font-sans">
@@ -22,24 +35,39 @@
         </div>
         <h1 class="text-2xl font-black text-slate-900 tracking-tight">Keny Support™</h1>
         <p class="text-slate-600 font-semibold text-sm mt-1">Hoja oficial de satisfacción por el favor realizado</p>
-        <p class="text-slate-400 text-xs mt-1">Atención: Votar menos de 4 estrellas aumentará el tiempo de espera de tu próximo favor.</p>
+        <p class="text-slate-400 text-xs mt-1">Atención: Votar por debajo del verde aumentará el tiempo de espera de tu próximo favor.</p>
       </div>
 
       <form id="rating-form" class="space-y-4">
-        <!-- Selector de Estrellas -->
-        <div class="text-center bg-slate-50 p-3 rounded-xl border border-slate-100">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+        <!-- Selector de Caritas -->
+        <div class="text-center bg-slate-50 p-4 rounded-xl border border-slate-100">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
             ¿Cómo de agradecido/a estás?
           </label>
-          <div id="stars-container" class="flex justify-center items-center gap-2 sm:gap-3 py-1 text-slate-300">
-            <button type="button" class="star-btn text-3xl sm:text-4xl focus:outline-none" data-val="1" aria-label="1 estrella"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn text-3xl sm:text-4xl focus:outline-none" data-val="2" aria-label="2 estrellas"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn text-3xl sm:text-4xl focus:outline-none" data-val="3" aria-label="3 estrellas"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn text-3xl sm:text-4xl focus:outline-none" data-val="4" aria-label="4 estrellas"><i class="fa-solid fa-star"></i></button>
-            <button type="button" class="star-btn text-3xl sm:text-4xl focus:outline-none" data-val="5" aria-label="5 estrellas"><i class="fa-solid fa-star"></i></button>
+          <div id="faces-container" class="flex justify-center items-center gap-2.5 sm:gap-4 py-2">
+            <!-- 1: Muy enfadado (Rojo) -->
+            <button type="button" class="face-btn text-rose-500 text-3xl sm:text-4xl focus:outline-none" data-val="1" aria-label="Muy insatisfecho">
+              <i class="fa-solid fa-face-angry"></i>
+            </button>
+            <!-- 2: Triste (Naranja) -->
+            <button type="button" class="face-btn text-orange-500 text-3xl sm:text-4xl focus:outline-none" data-val="2" aria-label="Insatisfecho">
+              <i class="fa-solid fa-face-frown"></i>
+            </button>
+            <!-- 3: Neutro (Amarillo) -->
+            <button type="button" class="face-btn text-amber-500 text-3xl sm:text-4xl focus:outline-none" data-val="3" aria-label="Neutro">
+              <i class="fa-solid fa-face-meh"></i>
+            </button>
+            <!-- 4: Sonriente (Lima) -->
+            <button type="button" class="face-btn text-lime-500 text-3xl sm:text-4xl focus:outline-none" data-val="4" aria-label="Satisfecho">
+              <i class="fa-solid fa-face-smile"></i>
+            </button>
+            <!-- 5: Radiante (Verde) -->
+            <button type="button" class="face-btn text-emerald-500 text-3xl sm:text-4xl focus:outline-none" data-val="5" aria-label="Muy satisfecho">
+              <i class="fa-solid fa-face-laugh-beam"></i>
+            </button>
           </div>
-          <p id="star-desc" class="text-xs font-semibold text-slate-400 mt-2 h-5 transition-colors">Marca tus estrellas</p>
-          <p id="star-error" class="hidden text-xs text-rose-500 font-medium mt-1">¡Tienes que valorar el esfuerzo humano de Keny!</p>
+          <p id="face-desc" class="text-xs font-semibold text-slate-400 mt-3 h-5 transition-colors">Selecciona tu nivel de satisfacción</p>
+          <p id="face-error" class="hidden text-xs text-rose-500 font-medium mt-1">¡Tienes que valorar el esfuerzo humano de Keny!</p>
         </div>
 
         <!-- Nombre del beneficiario -->
@@ -111,17 +139,26 @@
     const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzLMhCpwDWlWVIDGPbc00afieDx8s-MCfKBwXraBTlqWaG5EqNH6Nmp3V-fILazQVvfmw/exec';
 
     const ratingsLabels = { 
-      1: "1★ - Desagradecido total (no vuelvas a pedir)", 
-      2: "2★ - Tardó mucho y encima protestó", 
-      3: "3★ - Cumplió sin más (lo justo y necesario)", 
-      4: "4★ - Buen servicio, casi profesional", 
-      5: "5★ - ¡Keny salvador! Te debo la vida" 
+      1: "😡 1/5 - Desagradecido total (no vuelvas a pedir)", 
+      2: "🙁 2/5 - Tardó mucho y encima protestó", 
+      3: "😐 3/5 - Cumplió sin más (lo justo y necesario)", 
+      4: "🙂 4/5 - Buen servicio, casi profesional", 
+      5: "🤩 5/5 - ¡Keny salvador! Te debo la vida" 
     };
+
+    const labelColors = {
+      1: "text-rose-600",
+      2: "text-orange-600",
+      3: "text-amber-600",
+      4: "text-lime-600",
+      5: "text-emerald-600"
+    };
+
     let selectedRating = 0;
 
-    const starBtns = document.querySelectorAll('.star-btn');
-    const starDesc = document.getElementById('star-desc');
-    const starError = document.getElementById('star-error');
+    const faceBtns = document.querySelectorAll('.face-btn');
+    const faceDesc = document.getElementById('face-desc');
+    const faceError = document.getElementById('face-error');
     const nameInput = document.getElementById('name');
     const commentInput = document.getElementById('comment');
     const charCounter = document.getElementById('char-counter');
@@ -131,48 +168,48 @@
     const btnRestart = document.getElementById('btn-restart');
     const btnSubmit = document.getElementById('btn-submit');
 
-    function paintStars(value) {
-      starBtns.forEach(btn => {
+    function applyFaceState(val) {
+      faceBtns.forEach(btn => {
         const btnVal = parseInt(btn.dataset.val, 10);
-        if (btnVal <= value) {
-          btn.classList.remove('text-slate-300');
-          btn.classList.add('text-amber-400');
+        if (btnVal === val) {
+          btn.classList.add('active');
         } else {
-          btn.classList.remove('text-amber-400');
-          btn.classList.add('text-slate-300');
+          btn.classList.remove('active');
         }
       });
     }
 
     function updateLabel(val) {
+      // Limpiar clases de color
+      Object.values(labelColors).forEach(c => faceDesc.classList.remove(c));
+
       if (val > 0) {
-        starDesc.textContent = ratingsLabels[val];
-        starDesc.classList.remove('text-slate-400');
-        starDesc.classList.add('text-amber-600');
+        faceDesc.textContent = ratingsLabels[val];
+        faceDesc.classList.remove('text-slate-400');
+        faceDesc.classList.add(labelColors[val]);
       } else {
-        starDesc.textContent = 'Marca tus estrellas';
-        starDesc.classList.remove('text-amber-600');
-        starDesc.classList.add('text-slate-400');
+        faceDesc.textContent = 'Selecciona tu nivel de satisfacción';
+        faceDesc.classList.add('text-slate-400');
       }
     }
 
-    starBtns.forEach(btn => {
+    faceBtns.forEach(btn => {
       btn.addEventListener('mouseenter', () => {
         const val = parseInt(btn.dataset.val, 10);
-        paintStars(val);
+        applyFaceState(val);
         updateLabel(val);
       });
 
       btn.addEventListener('mouseleave', () => {
-        paintStars(selectedRating);
+        applyFaceState(selectedRating);
         updateLabel(selectedRating);
       });
 
       btn.addEventListener('click', () => {
         selectedRating = parseInt(btn.dataset.val, 10);
-        paintStars(selectedRating);
+        applyFaceState(selectedRating);
         updateLabel(selectedRating);
-        starError.classList.add('hidden');
+        faceError.classList.add('hidden');
       });
     });
 
@@ -184,7 +221,7 @@
       e.preventDefault();
 
       if (selectedRating === 0) {
-        starError.classList.remove('hidden');
+        faceError.classList.remove('hidden');
         return;
       }
 
@@ -198,7 +235,7 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
             nombre: nameInput.value.trim(),
-            estrellas: selectedRating,
+            estrellas: selectedRating, // Sigue enviando el número (1 a 5) al Sheets y Telegram
             comentario: commentInput.value.trim()
           })
         });
@@ -215,7 +252,7 @@
 
     btnRestart.addEventListener('click', () => {
       selectedRating = 0;
-      paintStars(0);
+      applyFaceState(0);
       nameInput.value = '';
       commentInput.value = '';
       charCounter.textContent = '0';
