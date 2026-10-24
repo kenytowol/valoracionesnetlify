@@ -86,12 +86,12 @@
     <!-- Pantalla de Éxito -->
     <div id="card-success" class="hidden bg-white rounded-2xl shadow-lg border border-slate-200/80 p-8 text-center">
       <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-50 text-emerald-500 rounded-full mb-4">
-        <i class="fa-solid fa-mug-hot text-2xl"></i>
+        <i class="fa-solid fa-beer-mug-empty text-2xl"></i>
       </div>
       <h2 class="text-2xl font-bold text-slate-900 mb-2">¡Favor registrado con éxito!</h2>
       <p class="text-slate-500 text-sm mb-6 max-w-xs mx-auto">
-        Keny ha cobrado <span class="font-bold text-slate-800">0,00 €</span> por este servicio.<br>
-        Recuerda que los favores se saldan con cafés, cañas o no volviendo a pedir ayuda en 48 horas.
+        Tarifa aplicada por Keny: <span class="font-bold text-slate-800">0,00 €</span>.<br>
+        El favor queda saldado. Recuerda que la paciencia de Keny no es infinita, pero siempre acepta una cerveza.
       </p>
       <button 
         id="btn-restart" 
@@ -115,7 +115,7 @@
       2: "2★ - Tardó mucho y encima protestó", 
       3: "3★ - Cumplió sin más (lo justo y necesario)", 
       4: "4★ - Buen servicio, casi profesional", 
-      5: "5★ - ¡Keny salvador! Te debo unas cañas 🍻" 
+      5: "5★ - ¡Keny salvador! Te debo la vida" 
     };
     let selectedRating = 0;
 
@@ -136,88 +136,4 @@
         const btnVal = parseInt(btn.dataset.val, 10);
         if (btnVal <= value) {
           btn.classList.remove('text-slate-300');
-          btn.classList.add('text-amber-400');
-        } else {
-          btn.classList.remove('text-amber-400');
-          btn.classList.add('text-slate-300');
-        }
-      });
-    }
-
-    starBtns.forEach(btn => {
-      btn.addEventListener('mouseenter', () => {
-        const val = parseInt(btn.dataset.val, 10);
-        paintStars(val);
-        starDesc.textContent = ratingsLabels[val];
-        starDesc.classList.add('text-amber-600');
-      });
-
-      btn.addEventListener('mouseleave', () => {
-        paintStars(selectedRating);
-        if (selectedRating > 0) {
-          starDesc.textContent = ratingsLabels[selectedRating];
-          starDesc.classList.add('text-amber-600');
-        } else {
-          starDesc.textContent = 'Marca tus estrellas';
-          starDesc.classList.remove('text-amber-600');
-        }
-      });
-
-      btn.addEventListener('click', () => {
-        selectedRating = parseInt(btn.dataset.val, 10);
-        paintStars(selectedRating);
-        starError.classList.add('hidden');
-      });
-    });
-
-    commentInput.addEventListener('input', () => {
-      charCounter.textContent = commentInput.value.length;
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      if (selectedRating === 0) {
-        starError.classList.remove('hidden');
-        return;
-      }
-
-      btnSubmit.disabled = true;
-      btnSubmit.innerHTML = '<span>Procesando reclamación...</span>';
-
-      try {
-        await fetch(GOOGLE_SHEET_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            nombre: nameInput.value.trim(),
-            estrellas: selectedRating,
-            comentario: commentInput.value.trim()
-          })
-        });
-
-        cardForm.classList.add('hidden');
-        cardSuccess.classList.remove('hidden');
-      } catch (err) {
-        alert('Error al enviar. Parece que el sistema se niega a registrar tu queja.');
-      } finally {
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = '<span>Enviar valoración</span><i class="fa-solid fa-stamp text-xs"></i>';
-      }
-    });
-
-    btnRestart.addEventListener('click', () => {
-      selectedRating = 0;
-      paintStars(0);
-      nameInput.value = '';
-      commentInput.value = '';
-      charCounter.textContent = '0';
-      starDesc.textContent = 'Marca tus estrellas';
-      starDesc.classList.remove('text-amber-600');
-      cardSuccess.classList.add('hidden');
-      cardForm.classList.remove('hidden');
-    });
-  </script>
-</body>
-</html>
+          btn.classList.
