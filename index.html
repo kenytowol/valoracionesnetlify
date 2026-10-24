@@ -27,8 +27,25 @@
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between p-4 sm:p-6 font-sans">
 
   <main class="w-full max-w-lg mx-auto my-auto">
+    <!-- Pantalla de Carga / Comprobación -->
+    <div id="card-loading" class="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-8 text-center">
+      <i class="fa-solid fa-spinner fa-spin text-3xl text-amber-500 mb-3"></i>
+      <p class="text-slate-600 text-sm font-semibold">Validando ticket oficial de Keny Support™...</p>
+    </div>
+
+    <!-- Pantalla de Error / Ticket Inválido o Usado -->
+    <div id="card-invalid" class="hidden bg-white rounded-2xl shadow-lg border border-slate-200/80 p-8 text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-rose-50 text-rose-500 rounded-full mb-4">
+        <i class="fa-solid fa-ticket-simple text-2xl"></i>
+      </div>
+      <h2 id="invalid-title" class="text-2xl font-bold text-slate-900 mb-2">Ticket no válido</h2>
+      <p id="invalid-desc" class="text-slate-500 text-sm max-w-xs mx-auto leading-relaxed">
+        Este enlace no existe o ya ha sido consumido. Recuerda que cada favor requiere un nuevo ticket emitido por Keny.
+      </p>
+    </div>
+
     <!-- Formulario -->
-    <div id="card-form" class="bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 sm:p-8">
+    <div id="card-form" class="hidden bg-white rounded-2xl shadow-lg border border-slate-200/80 p-6 sm:p-8">
       <div class="text-center mb-7">
         <div class="inline-flex items-center justify-center w-14 h-14 bg-amber-50 text-amber-500 rounded-full mb-3 shadow-inner">
           <i class="fa-solid fa-hand-holding-heart text-2xl"></i>
@@ -45,66 +62,30 @@
             ¿Cómo de agradecido/a estás?
           </label>
           <div id="faces-container" class="flex justify-center items-center gap-3 sm:gap-5 py-3">
-            <!-- 1: Muy enfadado (Rojo) -->
-            <button type="button" class="face-btn text-rose-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="1" aria-label="Muy insatisfecho">
-              <i class="fa-solid fa-face-angry"></i>
-            </button>
-            <!-- 2: Triste (Naranja) -->
-            <button type="button" class="face-btn text-orange-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="2" aria-label="Insatisfecho">
-              <i class="fa-solid fa-face-frown"></i>
-            </button>
-            <!-- 3: Neutro (Amarillo) -->
-            <button type="button" class="face-btn text-amber-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="3" aria-label="Neutro">
-              <i class="fa-solid fa-face-meh"></i>
-            </button>
-            <!-- 4: Sonriente (Lima) -->
-            <button type="button" class="face-btn text-lime-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="4" aria-label="Satisfecho">
-              <i class="fa-solid fa-face-smile"></i>
-            </button>
-            <!-- 5: Radiante (Verde) -->
-            <button type="button" class="face-btn text-emerald-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="5" aria-label="Muy satisfecho">
-              <i class="fa-solid fa-face-laugh-beam"></i>
-            </button>
+            <button type="button" class="face-btn text-rose-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="1"><i class="fa-solid fa-face-angry"></i></button>
+            <button type="button" class="face-btn text-orange-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="2"><i class="fa-solid fa-face-frown"></i></button>
+            <button type="button" class="face-btn text-amber-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="3"><i class="fa-solid fa-face-meh"></i></button>
+            <button type="button" class="face-btn text-lime-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="4"><i class="fa-solid fa-face-smile"></i></button>
+            <button type="button" class="face-btn text-emerald-500 text-4xl sm:text-5xl focus:outline-none p-1" data-val="5"><i class="fa-solid fa-face-laugh-beam"></i></button>
           </div>
           <p id="face-desc" class="text-xs font-semibold text-slate-400 mt-3 h-5 transition-colors">Selecciona tu nivel de satisfacción</p>
           <p id="face-error" class="hidden text-xs text-rose-500 font-medium mt-1">¡Tienes que valorar el esfuerzo humano de Keny!</p>
         </div>
 
-        <!-- Nombre del beneficiario -->
         <div>
           <label for="name" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
             Nombre del afortunado/a <span class="text-slate-400 font-normal lowercase">(o anónimo si te da vergüenza)</span>
           </label>
-          <input 
-            type="text" 
-            id="name" 
-            placeholder="Ej: El que no sabía reiniciar el router" 
-            maxlength="60"
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition shadow-sm">
+          <input type="text" id="name" placeholder="Ej: El que no sabía reiniciar el router" maxlength="60" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition shadow-sm">
         </div>
 
-        <!-- Comentario / Declaración -->
         <div>
-          <label for="comment" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
-            Comentario o agradecimiento
-          </label>
-          <textarea 
-            id="comment" 
-            rows="3" 
-            maxlength="500" 
-            placeholder="¿Algún comentario?" 
-            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition resize-none shadow-sm"
-            required></textarea>
-          <div class="text-right text-[11px] text-slate-400 mt-0.5">
-            <span id="char-counter">0</span> / 500
-          </div>
+          <label for="comment" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Comentario o agradecimiento</label>
+          <textarea id="comment" rows="3" maxlength="500" placeholder="¿Algún comentario?" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition resize-none shadow-sm" required></textarea>
+          <div class="text-right text-[11px] text-slate-400 mt-0.5"><span id="char-counter">0</span> / 500</div>
         </div>
 
-        <!-- Botón Enviar -->
-        <button 
-          id="btn-submit" 
-          type="submit" 
-          class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl transition shadow-md flex items-center justify-center gap-2">
+        <button id="btn-submit" type="submit" class="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl transition shadow-md flex items-center justify-center gap-2">
           <span>Enviar valoración</span>
           <i class="fa-solid fa-stamp text-xs"></i>
         </button>
@@ -121,13 +102,6 @@
         Tarifa aplicada por Keny: <span class="font-bold text-slate-800">0,00 €</span>.<br>
         El favor queda saldado. Recuerda que la paciencia de Keny es infinita y siempre acepta una cerveza.
       </p>
-      <button 
-        id="btn-restart" 
-        type="button" 
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm rounded-xl transition">
-        <i class="fa-solid fa-rotate-left text-xs"></i>
-        <span>Pedir otro favor (bajo tu propia responsabilidad)</span>
-      </button>
     </div>
   </main>
 
@@ -136,7 +110,51 @@
   </footer>
 
   <script>
-    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzLMhCpwDWlWVIDGPbc00afieDx8s-MCfKBwXraBTlqWaG5EqNH6Nmp3V-fILazQVvfmw/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLMhCpwDWlWVIDGPbc00afieDx8s-MCfKBwXraBTlqWaG5EqNH6Nmp3V-fILazQVvfmw/exec';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentTicket = urlParams.get('ticket');
+
+    const cardLoading = document.getElementById('card-loading');
+    const cardInvalid = document.getElementById('card-invalid');
+    const invalidTitle = document.getElementById('invalid-title');
+    const invalidDesc = document.getElementById('invalid-desc');
+    const cardForm = document.getElementById('card-form');
+    const cardSuccess = document.getElementById('card-success');
+
+    async function checkTicket() {
+      if (!currentTicket) {
+        showError("Acceso denegado", "Para valorar un favor necesitas un enlace con ticket oficial emitido por Keny.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=validateTicket&ticket=${encodeURIComponent(currentTicket)}`);
+        const data = await res.json();
+
+        if (data.valid) {
+          cardLoading.classList.add('hidden');
+          cardForm.classList.remove('hidden');
+        } else {
+          if (data.reason === 'used') {
+            showError("Ticket ya consumido", "Este ticket ya fue utilizado para valorar un favor anterior. Para una nueva valoración, invita a una cerveza a Keny y pídele un nuevo enlace.");
+          } else {
+            showError("Ticket inexistente", "El código de ticket de este enlace no es válido.");
+          }
+        }
+      } catch (e) {
+        showError("Error de conexión", "No se pudo verificar el ticket. Inténtalo de nuevo más tarde.");
+      }
+    }
+
+    function showError(title, desc) {
+      cardLoading.classList.add('hidden');
+      invalidTitle.textContent = title;
+      invalidDesc.textContent = desc;
+      cardInvalid.classList.remove('hidden');
+    }
+
+    checkTicket();
 
     const ratingsLabels = { 
       1: "😡 1/5 - Desagradecido total (no vuelvas a pedir)", 
@@ -155,7 +173,6 @@
     };
 
     let selectedRating = 0;
-
     const faceBtns = document.querySelectorAll('.face-btn');
     const faceDesc = document.getElementById('face-desc');
     const faceError = document.getElementById('face-error');
@@ -163,25 +180,16 @@
     const commentInput = document.getElementById('comment');
     const charCounter = document.getElementById('char-counter');
     const form = document.getElementById('rating-form');
-    const cardForm = document.getElementById('card-form');
-    const cardSuccess = document.getElementById('card-success');
-    const btnRestart = document.getElementById('btn-restart');
     const btnSubmit = document.getElementById('btn-submit');
 
     function applyFaceState(val) {
       faceBtns.forEach(btn => {
-        const btnVal = parseInt(btn.dataset.val, 10);
-        if (btnVal === val) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+        btn.classList.toggle('active', parseInt(btn.dataset.val, 10) === val);
       });
     }
 
     function updateLabel(val) {
       Object.values(labelColors).forEach(c => faceDesc.classList.remove(c));
-
       if (val > 0) {
         faceDesc.textContent = ratingsLabels[val];
         faceDesc.classList.remove('text-slate-400');
@@ -198,12 +206,10 @@
         applyFaceState(val);
         updateLabel(val);
       });
-
       btn.addEventListener('mouseleave', () => {
         applyFaceState(selectedRating);
         updateLabel(selectedRating);
       });
-
       btn.addEventListener('click', () => {
         selectedRating = parseInt(btn.dataset.val, 10);
         applyFaceState(selectedRating);
@@ -218,7 +224,6 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       if (selectedRating === 0) {
         faceError.classList.remove('hidden');
         return;
@@ -228,11 +233,12 @@
       btnSubmit.innerHTML = '<span>Procesando valoración...</span>';
 
       try {
-        await fetch(GOOGLE_SHEET_URL, {
+        await fetch(GOOGLE_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
+            ticket: currentTicket,
             nombre: nameInput.value.trim(),
             estrellas: selectedRating,
             comentario: commentInput.value.trim()
@@ -242,22 +248,10 @@
         cardForm.classList.add('hidden');
         cardSuccess.classList.remove('hidden');
       } catch (err) {
-        alert('Error al enviar. Parece que el sistema se niega a registrar tu valoración.');
-      } finally {
+        alert('Error al enviar la valoración.');
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = '<span>Enviar valoración</span><i class="fa-solid fa-stamp text-xs"></i>';
       }
-    });
-
-    btnRestart.addEventListener('click', () => {
-      selectedRating = 0;
-      applyFaceState(0);
-      nameInput.value = '';
-      commentInput.value = '';
-      charCounter.textContent = '0';
-      updateLabel(0);
-      cardSuccess.classList.add('hidden');
-      cardForm.classList.remove('hidden');
     });
   </script>
 </body>
